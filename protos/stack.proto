@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+/* 
+* Service that stacks up markers until the last 
+* one is received
+*/
+service StackService {
+    rpc GetStack(Empty) returns (ImagesData);
+    rpc AddMarker(ImageData) returns (Empty);
+}
+
+
+message ImagesData {
+  repeated ImageData images = 1;
+}
+
+
+message ImageData {
+  repeated Marker markers = 1;
+  string name = 2;
+  bool is_last = 3;
+}
+
+
+message Marker {
+
+    string id = 1;
+    Matrix R = 2;
+    Matrix t = 3;
+    Matrix corners = 4;
+    Matrix intrinsics = 5;
+    double error = 6;
+}
+
+
+message Matrix {
+    repeated Row row = 1;
+  }
+  
+message Row {
+  repeated double elements = 1;
+}
+
+  
+
+/* 
+* Empty message that the orquestrator sends to the server to get images
+* and that the server responds with when receiving images
+*/
+message Empty {}
